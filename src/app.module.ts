@@ -12,6 +12,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { gpsModule } from './modules/gps/gps.module';
 import { userModule } from './modules/user/user.module';
 import { AppGateway } from './app.gateway';
+import { BookModule } from './modules/book/book.module';
+import { SaleModule } from './modules/sale/sale.module';
+import { CategoryModule } from './modules/category/category.module';
+import { StorageModule } from './modules/storage/storage.module';
 
 @Module({
   imports: [
@@ -19,6 +23,10 @@ import { AppGateway } from './app.gateway';
     AuthModule,
     // gpsModule,
     userModule,
+    BookModule,
+    SaleModule,
+    CategoryModule,
+    StorageModule,
     // ServeStaticModule.forRoot({
     //   rootPath: join(__dirname, '..', AppConfig.STATIC_DIR),
     // }),
@@ -36,4 +44,4 @@ import { AppGateway } from './app.gateway';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

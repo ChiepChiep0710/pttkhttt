@@ -85,17 +85,16 @@ export class userService {
     const userId = data.userId;
     console.log('ussẻ ìd', userId);
     try {
-      const searchres = await this.gpsModel.findOne({ userId: userId });
+      // const searchres = await this.gpsModel.findOne({ userId: userId });
 
       const searchuser = await this.userModel
         .findOne({ _id: userId })
         .select({ password: 0, lastToken: 0 })
         .lean();
-      console.log('selo', searchres);
+      // console.log('selo', searchres);
       console.log('user se', searchuser);
       return new ApiOK({
-        locations: searchres.logLocation,
-        ...searchuser,
+        result: searchuser
       });
     } catch (err) {
       return new ApiError(err.message);
