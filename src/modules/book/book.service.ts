@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { Book, BookSchema } from '../../database/models/book.model';
 // import { Categories, CategoriesSchema } from '../../database/models/book.model';
 // import { Product, ProductSchema } from '../../database/models/product.model';
-import { BookDto, BookUpdateDto, DeleteBookDto } from './book.dto';
+import { addQuantityBookDto, BookDto, BookUpdateDto, DeleteBookDto } from './book.dto';
 import { ApiError } from '../../common/responses/api-error';
 import { ApiOK } from '../../common/responses/api-ok';
 import { Utils } from "../../common/utils/ultis";
@@ -114,6 +114,39 @@ export class BookService {
                 total: total,
                 result: searchres || []
             })
+        } catch (err) {
+            return new ApiError(err.message)
+        }
+    }
+    async addQuantityBook(data: addQuantityBookDto, request) {
+        const admin = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+        if (admin['role'] !== 'admin') throw new ApiError('Bạn không có quyền để thực hiện hành động này', "E3");
+        try {
+            console.log(data)
+            const bookinfo = await this.BookModel.findOne({ _id: data._id });
+            bookinfo.quantity = bookinfo.quantity + data.quantity
+            await bookinfo.save()
+
+            return new ApiOK({ result: bookinfo })
+        } catch (err) {
+            return new ApiError(err.message)
+        }
+    }
+    async minusQuantityBook(data: addQuantityBookDto, request) {
+        const admin = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+        if (admin['role'] !== 'admin') throw new ApiError('Bạn không có quyền để thực hiện hành động này', "E3");
+        try {
+            console.log(data)
+            const bookinfo = await this.BookModel.findOne({ _id: data._id });
+            if (bookinfo.quantity >= data.quantity) {
+                bookinfo.quantity = bookinfo.quantity - data.quantity
+                await bookinfo.save()
+            } else {
+                return new ApiError("qua so luong cho phep")
+            }
+
+
+            return new ApiOK({ result: bookinfo })
         } catch (err) {
             return new ApiError(err.message)
         }

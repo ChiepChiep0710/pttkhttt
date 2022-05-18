@@ -16,7 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags, ApiConsumes } from '@nestjs/swagger';
 import { BookService } from './book.service';
-import { BookDto, DeleteBookDto, searchBookDto, BookUpdateDto } from './book.dto';
+import { BookDto, DeleteBookDto, searchBookDto, BookUpdateDto, addQuantityBookDto } from './book.dto';
 import { storage } from '../../config/storage.config';
 import { Auth } from "../../common/decorator/auth.decorator";
 import { AppConfig } from "../../common/contants/app-config";
@@ -63,5 +63,26 @@ export class BookController {
         return await this.BookService.searchBook(data);
 
     }
+    @Put('/import')
+    @Auth()
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'update Book' })
+
+    async importBook(@Body() data: addQuantityBookDto, @Request() request) {
+
+
+        return await this.BookService.addQuantityBook(data, request);
+    }
+    @Put('/export')
+    @Auth()
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'update Book' })
+
+    async exportBook(@Body() data: addQuantityBookDto, @Request() request) {
+
+
+        return await this.BookService.minusQuantityBook(data, request);
+    }
+
 
 }

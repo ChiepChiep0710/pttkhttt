@@ -143,4 +143,19 @@ export class searchBookDto {
     options: searchOptions;
 
 }
+export class addQuantityBookDto {
+    @ApiProperty({ required: true })
+    @IsNotEmpty({ message: 'E1' })
+    _id: string;
+
+
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    quantity: number;
+
+
+}
 
