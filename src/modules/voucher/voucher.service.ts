@@ -5,18 +5,20 @@ import { Model } from 'mongoose';
 import { Voucher, VoucherSchema } from '../../database/models/voucher.model';
 // import { Categories, CategoriesSchema } from '../../database/models/Voucher.model';
 // import { Product, ProductSchema } from '../../database/models/product.model';
-import { VoucherDto, VoucherUpdateDto, DeleteVoucherDto } from './voucher.dto';
+import { VoucherDto, VoucherUpdateDto, DeleteVoucherDto, saveVoucherDto } from './voucher.dto';
 import { ApiError } from '../../common/responses/api-error';
 import { ApiOK } from '../../common/responses/api-ok';
 import { Utils } from "../../common/utils/ultis";
 import { JwtService } from "@nestjs/jwt";
 import { AppConfig } from 'src/common/contants/app-config';
 import { isEmpty } from 'class-validator';
+import { User } from 'src/database/models/user.model';
 
 @Injectable()
 export class VoucherService {
     constructor(
         @InjectModel('Voucher') private readonly VoucherModel: Model<Voucher>,
+        @InjectModel('User') private readonly UserModel: Model<User>,
         private readonly jwtService: JwtService,
     ) { }
     async insertVoucher(data: VoucherDto, request) {
@@ -108,6 +110,36 @@ export class VoucherService {
                 total: total,
                 result: searchres || []
             })
+        } catch (err) {
+            return new ApiError(err.message)
+        }
+    }
+    async saveVoucher(data: saveVoucherDto, request) {
+        const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+        if (user['role'] !== 'user') throw new ApiError('Bạn không có quyền để thực hiện hành động này', "E3");
+        try {
+            console.log(data)
+            const userinfo = await this.UserModel.findOne({ _id: user['_id'] });
+            const voucherlist = data.voucherlist
+            for (let voucherid of voucherlist) {
+                userinfo.voucher.push(voucherid)
+            }
+            await userinfo.save();
+            return new ApiOK({ result: userinfo })
+        } catch (err) {
+            return new ApiError(err.message)
+        }
+    }
+    async getVoucher(request) {
+        const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+        if (user['role'] !== 'user') throw new ApiError('Bạn không có quyền để thực hiện hành động này', "E3");
+        try {
+
+            const userinfo = await this.UserModel.findOne({ _id: user['_id'] });
+            const voucherlist = userinfo.voucher
+            const voucherres = await this.VoucherModel.find({ _id: { $in: voucherlist } }).lean()
+
+            return new ApiOK({ result: voucherres })
         } catch (err) {
             return new ApiError(err.message)
         }

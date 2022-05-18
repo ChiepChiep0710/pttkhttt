@@ -27,7 +27,7 @@ import { BillModule } from './modules/bill/bill.module';
     DatabaseModule,
     AuthModule,
     // gpsModule,
-    // userModule,
+    userModule,
     BookModule,
     SaleModule,
     CategoryModule,

@@ -36,6 +36,14 @@ export class VoucherDto {
 
 
 }
+export class saveVoucherDto {
+    @ApiProperty({ required: false })
+    @IsNotEmpty({ message: 'E1' })
+    voucherlist: [];
+
+
+
+}
 export class VoucherUpdateDto {
     @ApiProperty({ required: true })
     @IsNotEmpty({ message: 'E1' })

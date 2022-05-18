@@ -7,10 +7,11 @@ import { VoucherSchema } from '../../database/models/voucher.model';
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "../../config/config.module";
 import { ConfigService } from "../../config/config.service";
+import { UserSchema } from 'src/database/models/user.model';
 
 @Module({
     imports: [
-        MongooseModule.forFeature([{ name: 'Voucher', schema: VoucherSchema }]),
+        MongooseModule.forFeature([{ name: 'Voucher', schema: VoucherSchema }, { name: 'User', schema: UserSchema }]),
 
         JwtModule.registerAsync({
             imports: [ConfigModule],

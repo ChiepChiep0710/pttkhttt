@@ -69,7 +69,7 @@ export class BookService {
             query.author = data.name //Utils.convertString(data.author)
             query.author = { '$regex': Utils.escapeRegex(query.author), '$options': 'i' }
         }
-        if (data.id) query._id = data.id
+        if (data._id) query._id = data._id
 
 
 

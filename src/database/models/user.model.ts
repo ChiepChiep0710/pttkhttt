@@ -10,6 +10,7 @@ export const UserSchema = new mongoose.Schema(
     phoneNumber: { type: String },
     address: { type: String },
     cart: [{ type: String }],
+    voucher: [{ type: String }],
     lastToken: { type: String },
   },
   {
@@ -27,6 +28,7 @@ export interface User extends mongoose.Document {
   firstName: string;
   lastName: string;
   cart: string[];
+  voucher: string[];
   lastToken: string;
   createdAt: Date;
   updatedAt: Date;

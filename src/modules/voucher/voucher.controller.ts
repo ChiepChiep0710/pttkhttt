@@ -16,7 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags, ApiConsumes } from '@nestjs/swagger';
 import { VoucherService } from './voucher.service';
-import { VoucherDto, DeleteVoucherDto, searchVoucherDto, VoucherUpdateDto } from './voucher.dto';
+import { VoucherDto, DeleteVoucherDto, searchVoucherDto, VoucherUpdateDto, saveVoucherDto } from './voucher.dto';
 import { storage } from '../../config/storage.config';
 import { Auth } from "../../common/decorator/auth.decorator";
 import { AppConfig } from "../../common/contants/app-config";
@@ -63,5 +63,23 @@ export class VoucherController {
         return await this.VoucherService.searchVoucher(data);
 
     }
+    @Put('/saveVoucher')
+    @Auth()
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'update Voucher' })
+
+    async saveVoucher(@Body() data: saveVoucherDto, @Request() request) {
+
+
+        return await this.VoucherService.saveVoucher(data, request);
+    }
+    @Get('/getUserVoucher')
+    @Auth()
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: "Get list of Voucher " })
+    async getUserVoucher(@Request() request) {
+    return await this.VoucherService.getVoucher(request);
+
+}
 
 }
