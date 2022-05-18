@@ -12,7 +12,10 @@ import { LoginDto, LoginGoogleDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ResendCodeDto } from './dto/resend.code.dto';
 import { Admin } from '../../database/models/admin.model';
+import { ChangePasswordDto } from "./dto/change-password.dto";
+
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -186,5 +189,40 @@ export class AuthService {
       };
       return new ApiOK(userres);
     }
+  }
+  async changePassword(request: any, data: ChangePasswordDto) {
+    const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+    if (user['role'] !== 'user') throw new ApiError('Invalid user', 'E1');
+    const userUpdate = await this.userModel.findOne({ _id: user['_id'] }, { password: 1 });
+    const isMatched = await bcrypt.compare(data.currentPassword, userUpdate.password)
+    if (!isMatched) {
+      throw new ApiError('Password bạn nhập không khớp với password cũ, vui lòng nhập lại  ', 'E29', {})
+    }
+
+    const samePass = await bcrypt.compare(data.newPassword, userUpdate.password)
+    if (samePass) {
+      throw new ApiError('Mật khẩu mới không được trùng với mật khẩu cũ ', 'E27', {})
+    }
+
+    const newPassword = await Utils.hashPassword(data.newPassword);
+    userUpdate.password = newPassword;
+    await userUpdate.save();
+    return new ApiOK({ result: true });
+  }
+
+  async updateUserInfor(request: any, data: UpdateUserDto) {
+    const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
+    if (user['role'] !== 'user') throw new ApiError('Invalid user', 'E1');
+    const updateUser = await this.userModel.findOne({ _id: user['_id']} );
+    if (!updateUser) throw new ApiError('Invalid user', 'E1');
+    const listKey = Object.keys(data);
+    if (listKey && listKey.length > 0) {
+      for (let index = 0 ; index <= listKey.length - 1; index++) {
+        updateUser[listKey[index]] = data[listKey[index]];
+      }
+      await updateUser.save();
+    }
+
+    return new ApiOK({ result: true })
   }
 }

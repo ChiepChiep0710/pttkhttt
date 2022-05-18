@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {
-  Body, Controller, Get, HttpCode, HttpStatus, Post, Query, UseGuards, Request
+  Body, Controller, Get, HttpCode, HttpStatus, Post, Query, UseGuards, Request, Put
 } from "@nestjs/common";
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags, ApiConsumes } from '@nestjs/swagger';
@@ -13,6 +13,8 @@ import { ResendCodeDto } from "./dto/resend.code.dto";
 import { AuthGuard } from "@nestjs/passport";
 import * as http from "http";
 import { ForgotPasswordDto } from "./dto/forgot-password.dto";
+import { ChangePasswordDto } from "./dto/change-password.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 
 
 @Controller('auth')
@@ -80,6 +82,21 @@ export class AuthController {
   async getmeadmin(@Request() request) {
     return await this.authService.getmeadmin(request);
 
+  }
+  @Put('change-password')
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'change user password' })
+  async changePassword(@Request() request, @Body() data: ChangePasswordDto) {
+    return await this.authService.changePassword(request, data);
+  }
+
+  @Put('update-infor-user')
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update user infor' })
+  async updateUserInfor(@Request() request, @Body() data: UpdateUserDto) {
+    return await this.authService.updateUserInfor(request, data);
   }
 
 
