@@ -6,7 +6,7 @@ export const BillSchema = new mongoose.Schema(
         address: { type: String },
         phonenumber: { type: String },
         name: { type: String },
-        booklist: [{ type: Object }],
+        checkout_result: [{ type: Object }],
         price: { type: Number },
         userid: { type: String },
         voucher: { type: String },
@@ -25,7 +25,7 @@ export interface Bill extends mongoose.Document {
     name: string,
     voucher: string,
     price: number,
-    booklist: Object[],
+    checkout_result: Object[],
     createdAt: Date;
     updatedAt: Date;
 }

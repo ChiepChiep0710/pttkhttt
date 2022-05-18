@@ -50,6 +50,10 @@ export class BillDto {
 
     @ApiProperty({ required: true })
     @IsNotEmpty({ message: 'E1' })
+    checkout_result: [];
+
+    @ApiProperty({ required: false })
+    @IsNotEmpty({ message: 'E1' })
     booklist: [];
 
     @ApiProperty({ required: true })
