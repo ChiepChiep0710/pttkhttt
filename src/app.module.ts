@@ -16,17 +16,26 @@ import { BookModule } from './modules/book/book.module';
 import { SaleModule } from './modules/sale/sale.module';
 import { CategoryModule } from './modules/category/category.module';
 import { StorageModule } from './modules/storage/storage.module';
+import { OrderSchema } from './database/models/order.model';
+import { OrderModule } from './modules/order/order.module';
+import { VoucherModule } from './modules/voucher/voucher.module';
+import { RatingModule } from './modules/rating/rating.module';
+import { BillModule } from './modules/bill/bill.module';
 
 @Module({
   imports: [
     DatabaseModule,
     AuthModule,
     // gpsModule,
-    userModule,
+    // userModule,
     BookModule,
     SaleModule,
     CategoryModule,
     StorageModule,
+    OrderModule,
+    VoucherModule,
+    RatingModule,
+    BillModule,
     // ServeStaticModule.forRoot({
     //   rootPath: join(__dirname, '..', AppConfig.STATIC_DIR),
     // }),

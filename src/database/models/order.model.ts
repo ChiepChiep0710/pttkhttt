@@ -3,27 +3,19 @@ import * as mongoose from 'mongoose';
 
 export const OrderSchema = new mongoose.Schema(
     {
-        name: { type: String },
-        author: { type: String },
-        category: { type: Array, default: [] },
-        description: { type: String },
+        bookid: { type: String },
+        quantity: { type: Number },
         price: { type: Number },
-        rating: { type: Number },
-        saleid: { type: String },
     },
     {
         timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
     },
 );
-export interface Book extends mongoose.Document {
+export interface Order extends mongoose.Document {
     _id: string;
-    name: string;
-    author: string;
-    category: [string],
-    description: string;
-    price: number;
-    rating: number;
-    saleid: string;
+    bookid: string,
+    quantity: number,
+    price: number,
     createdAt: Date;
     updatedAt: Date;
 }

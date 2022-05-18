@@ -13,48 +13,30 @@ import {
 import { Type } from 'class-transformer';
 import { ValidatePasswordRule } from 'src/common/validations';
 import { searchOptions } from 'src/common/utils/ultis';
-export class BookDto {
+export class VoucherDto {
     @ApiProperty({ required: true })
     @IsNotEmpty({ message: 'E1' })
     name: string;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({ required: true })
     @IsNotEmpty({ message: 'E1' })
-    author: string;
-
-    @ApiProperty({ required: false })
-    @IsNotEmpty({ message: 'E1' })
-    category: string[] = [];
-
-
-    @ApiProperty({ required: false })
-    @IsOptional()
     description: string;
 
-    @ApiProperty({ required: false })
-    @IsOptional()
-    image: string;
-
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @Type(() => Number)
-    @IsNumber()
-    price: number;
-
-
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @Type(() => Number)
-    @IsNumber()
-    quantity: number;
-
-
-    @ApiProperty({ required: false })
+    @ApiProperty({ required: true })
     @IsNotEmpty({ message: 'E1' })
-    sale: string;
+    code: string;
+
+    @ApiProperty({ required: true })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    percent: number;
+
+
+
 
 }
-export class BookUpdateDto {
+export class VoucherUpdateDto {
     @ApiProperty({ required: true })
     @IsNotEmpty({ message: 'E1' })
     _id: string;
@@ -64,50 +46,36 @@ export class BookUpdateDto {
 
     @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
-    author: string;
-
-    @ApiProperty({ required: false })
-    @IsNotEmpty({ message: 'E1' })
-    category: string[] = [];
-
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @Type(() => Number)
-    @IsNumber()
-    quantity: number;
-
-    @ApiProperty({ required: false })
-    @IsOptional()
     description: string;
 
     @ApiProperty({ required: false })
-    @IsOptional()
-    image: string;
+    @IsNotEmpty({ message: 'E1' })
+    code: string;
 
     @ApiProperty({ required: false })
     @IsOptional()
     @Type(() => Number)
     @IsNumber()
-    price: number;
+    percent: number;
 
-    @ApiProperty({ required: false })
-    @IsNotEmpty({ message: 'E1' })
-    sale: string;
+
+
+
 
 }
 
-export class DeleteBookDto {
+export class DeleteVoucherDto {
     @ApiProperty({ required: true })
     @IsOptional()
     deleteId: [];
 }
 
 
-class dataSearchBookDto {
+class dataSearchVoucherDto {
 
     @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
-    _id: string;
+    id: string;
 
     @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
@@ -115,29 +83,27 @@ class dataSearchBookDto {
 
     @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
-    author: string;
+    description: string;
 
     @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
-    category: string[] = [];
+    code: string;
 
     @ApiProperty({ required: false })
     @IsOptional()
     @Type(() => Number)
     @IsNumber()
-    fromprice: number;
+    percent: number;
 
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @Type(() => Number)
-    @IsNumber()
-    toprice: number;
+
+
+
 
 }
 
-export class searchBookDto {
+export class searchVoucherDto {
     @ApiProperty({ required: true })
-    query: dataSearchBookDto;
+    query: dataSearchVoucherDto;
 
     @ApiProperty({ required: false })
     options: searchOptions;

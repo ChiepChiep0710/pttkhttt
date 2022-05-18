@@ -24,8 +24,9 @@ export class StorageService {
         if (admin['role'] !== 'admin') throw new ApiError('Bạn không có quyền để thực hiện hành động này', "E3");
         try {
             console.log(data)
-            await this.StorageModel.create(data);
-            return new ApiOK({ result: true })
+            const result = await this.StorageModel.create(data);
+
+            return new ApiOK({ result: result })
         } catch (err) {
             return new ApiError(err.message)
         }

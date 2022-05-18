@@ -9,7 +9,7 @@ export const UserSchema = new mongoose.Schema(
     lastName: { type: String },
     phoneNumber: { type: String },
     address: { type: String },
-    cart: { Type: Array, default: [] },
+    cart: [{ type: String }],
     lastToken: { type: String },
   },
   {
@@ -26,7 +26,7 @@ export interface User extends mongoose.Document {
   address: string;
   firstName: string;
   lastName: string;
-  cart: [string];
+  cart: string[];
   lastToken: string;
   createdAt: Date;
   updatedAt: Date;

@@ -2,10 +2,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Book, BookSchema } from '../../database/models/book.model';
-// import { Categories, CategoriesSchema } from '../../database/models/book.model';
+import { Voucher, VoucherSchema } from '../../database/models/voucher.model';
+// import { Categories, CategoriesSchema } from '../../database/models/Voucher.model';
 // import { Product, ProductSchema } from '../../database/models/product.model';
-import { BookDto, BookUpdateDto, DeleteBookDto } from './book.dto';
+import { VoucherDto, VoucherUpdateDto, DeleteVoucherDto } from './voucher.dto';
 import { ApiError } from '../../common/responses/api-error';
 import { ApiOK } from '../../common/responses/api-ok';
 import { Utils } from "../../common/utils/ultis";
@@ -14,47 +14,47 @@ import { AppConfig } from 'src/common/contants/app-config';
 import { isEmpty } from 'class-validator';
 
 @Injectable()
-export class BookService {
+export class VoucherService {
     constructor(
-        @InjectModel('Book') private readonly BookModel: Model<Book>,
+        @InjectModel('Voucher') private readonly VoucherModel: Model<Voucher>,
         private readonly jwtService: JwtService,
     ) { }
-    async insertBook(data: BookDto, request) {
+    async insertVoucher(data: VoucherDto, request) {
         const admin = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
         if (admin['role'] !== 'admin') throw new ApiError('Bạn không có quyền để thực hiện hành động này', "E3");
         try {
             console.log(data)
-            await this.BookModel.create(data);
+            await this.VoucherModel.create(data);
             return new ApiOK({ result: true })
         } catch (err) {
             return new ApiError(err.message)
         }
     }
-    async deleteBook(id: DeleteBookDto, request) {
+    async deleteVoucher(id: DeleteVoucherDto, request) {
         const admin = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
         if (admin['role'] !== 'admin') throw new ApiError('You done have permission to do this action', "E3");
         try {
-            await this.BookModel.deleteMany({ "_id": { $in: id.deleteId } })
+            await this.VoucherModel.deleteMany({ "_id": { $in: id.deleteId } })
             return new ApiOK({ result: true })
         } catch (err) {
             return new ApiError(err.message)
         }
 
     }
-    async updateBook(data: BookUpdateDto, request) {
+    async updateVoucher(data: VoucherUpdateDto, request) {
         const admin = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
         if (admin['role'] !== 'admin') throw new ApiError('You done have permission to do this action', "E3");
 
         try {
-            await this.BookModel.updateOne({ "_id": data._id }, data);
+            await this.VoucherModel.updateOne({ "_id": data._id }, data);
             return new ApiOK({ result: true })
         } catch (err) {
             return new ApiError(err.message)
         }
     }
-    async searchBook(data: any) {
+    async searchVoucher(data: any) {
         let query = data.query || {}
-        console.log(data)
+
         let options = data.options || {}
         let sortField = 'createAt';
         let sortType = -1;
@@ -62,12 +62,8 @@ export class BookService {
         let limit = 0;
         query = {}
         if (data.name) {
-            query.name = data.name//Utils.convertString(data.name)
+            query.name = Utils.convertString(data.name)
             query.name = { '$regex': Utils.escapeRegex(query.name), '$options': 'i' }
-        }
-        if (data.author) {
-            query.author = data.name //Utils.convertString(data.author)
-            query.author = { '$regex': Utils.escapeRegex(query.author), '$options': 'i' }
         }
         if (data.id) query._id = data.id
 
@@ -86,26 +82,24 @@ export class BookService {
         if (data.fromprice) {
 
             const frprice = {
-                price: { '$gte': Number(data.fromprice) },
+                '$gte': data.fromprice,
             }
             query.$and.push(frprice)
         }
         let tdate
         if (data.toprice) {
             const topr = {
-                price: { '$lte': data.toprice },
+                '$lte': data.toprice,
             }
             query.$and.push(topr)
         }
         if (query.$and.length === 0) delete query.$and
-        if (data.category) {
-            query.category = { $all: data.category }
-        }
+
         console.log(query)
         console.log({ offset, limit, sortField, sortType })
         try {
-            let total = await this.BookModel.find(query).countDocuments();
-            let searchres = await this.BookModel.find(query)
+            let total = await this.VoucherModel.find(query).countDocuments();
+            let searchres = await this.VoucherModel.find(query)
                 .skip(offset)
                 .limit(limit)
                 .sort([[sortField, sortType]])
