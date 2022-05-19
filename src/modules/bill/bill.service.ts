@@ -99,17 +99,19 @@ export class BillService {
     }
     async searchBill(data: any, request) {
         const user = Utils.decodeJwtService(request.headers['authorization'], this.jwtService);
-        if (user['role'] !== 'user' || user['role'] !== 'admin') throw new ApiError('You done have permission to do this action', "E3");
+        // if (user['role'] !== 'user' ) throw new ApiError('You done have permission to do this action', "E3");
+        // if (user['role'] !== 'admin' ) throw new ApiError('You done have permission to do this action', "E3");
+
         let query = data.query || {}
         if (user['role'] == "user") query.userid = user["_id"]
-        if (user["admin"] == "admin") query.userid = data.userid
+        else  if (user["admin"] == "admin") query.userid = data.userid
         let options = data.options || {}
         let sortField = 'createAt';
         let sortType = -1;
         let offset = 0;
         let limit = 0;
         query = {}
-
+        if (data._id) query._id= data._id
 
 
         sortField = data.sortField || 'createAt';

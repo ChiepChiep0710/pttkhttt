@@ -44,17 +44,13 @@ export class BillDto {
     @IsNotEmpty({ message: 'E1' })
     name: string;
 
-    @ApiProperty({ required: true })
+    @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
     voucher: string;
 
     @ApiProperty({ required: true })
     @IsNotEmpty({ message: 'E1' })
     checkout_result: [];
-
-    @ApiProperty({ required: false })
-    @IsNotEmpty({ message: 'E1' })
-    booklist: [];
 
     @ApiProperty({ required: true })
     @IsOptional()
@@ -111,7 +107,7 @@ class dataSearchBillDto {
 
     @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
-    id: string;
+    _id: string;
 
     @ApiProperty({ required: false })
     @IsNotEmpty({ message: 'E1' })
